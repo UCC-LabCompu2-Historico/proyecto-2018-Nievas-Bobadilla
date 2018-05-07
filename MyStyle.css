@@ -1,0 +1,31 @@
+    /*padding: 20px;              /*margenes del texto con respecto al div*/
+    /*margin: 10px;                /*margenes del div con respect a lo que lo contiene*/
+    /*border: 2px solid #7a8aac;  /*espesor y color de borde de div*/
+    /*border-radius: 20px;        /*radio del redondeado del div*/
+#titulo{
+    height: 100%;
+    float: left;
+    width: 25%;
+    text-align: left;
+}
+#logo{
+    height: 100%;
+    float: left;
+    width: 75px;
+    border-left: 1px solid #ababab;
+    border-right: 1px solid #ababab;
+}
+#head{
+    text-align: right;
+    height: 100px;
+    width: 100%;
+    background: #EEEEEE;
+    border: 1px solid #ababab;
+}
+img{
+    width: 100%;
+    height: 100%;
+}
+#pieDePagina{
+    padding-top: 40%;
+}
