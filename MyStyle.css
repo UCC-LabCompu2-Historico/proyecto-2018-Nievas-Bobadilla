@@ -1,7 +1,6 @@
-    /*padding: 20px;              /*margenes del texto con respecto al div*/
-    /*margin: 10px;                /*margenes del div con respect a lo que lo contiene*/
-    /*border: 2px solid #7a8aac;  /*espesor y color de borde de div*/
-    /*border-radius: 20px;        /*radio del redondeado del div*/
+body{
+    text-align: center;
+}
 #titulo{
     height: 100%;
     float: left;
@@ -16,6 +15,8 @@
     border-right: 1px solid #ababab;
 }
 #head{
+    top:0px;
+    position:absolute;
     text-align: right;
     height: 100px;
     width: 100%;
@@ -23,9 +24,42 @@
     border: 1px solid #ababab;
 }
 img{
-    width: 100%;
+    width: auto;
     height: 100%;
+    border: 1px solid #ababab;
+}
+.alta{
+    width: 100%;
+    height: auto;
+    border: 1px solid #ababab;
+
 }
 #pieDePagina{
-    padding-top: 40%;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    height: 20px;
+    border: 1px solid #ababab;
+}
+#sobrePie{
+    position: absolute;
+    height: 100px;
+    bottom:20px;
+    width: 100%;
+    background: #EEEEEE;
+    border: 1px solid #ababab;
+}
+.hiper{
+    height: 86px;
+    width: 15%;
+    margin-left: 9%;
+    margin-top: 7px;
+    float: left;
+    background-color: white;
+    text-align: center;
+}
+h3{
+    position: absolute;
+    top:100px;
+    text-align: center;
 }
