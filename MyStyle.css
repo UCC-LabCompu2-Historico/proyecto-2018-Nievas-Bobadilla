@@ -1,65 +1,89 @@
-body{
+body {
     text-align: center;
+    margin: 0px;
+    min-width: 400px;
 }
-#titulo{
+
+#titulo {
     height: 100%;
     float: left;
-    width: 25%;
+    width: 300px;
     text-align: left;
 }
-#logo{
+
+#logo {
     height: 100%;
     float: left;
     width: 75px;
-    border-left: 1px solid #ababab;
-    border-right: 1px solid #ababab;
 }
-#head{
-    top:0px;
-    position:absolute;
+
+#head {
+    top: 0px;
+    position: absolute;
     text-align: right;
     height: 100px;
     width: 100%;
     background: #EEEEEE;
-    border: 1px solid #ababab;
 }
-img{
+
+img {
     width: auto;
     height: 100%;
-    border: 1px solid #ababab;
 }
-.alta{
+
+.alta {
     width: 100%;
     height: auto;
-    border: 1px solid #ababab;
 
 }
-#pieDePagina{
+
+#pieDePagina {
     position: absolute;
     width: 100%;
     bottom: 0px;
     height: 20px;
-    border: 1px solid #ababab;
 }
-#sobrePie{
+
+#sobrePie {
     position: absolute;
     height: 100px;
-    bottom:20px;
+    bottom: 20px;
     width: 100%;
     background: #EEEEEE;
-    border: 1px solid #ababab;
+    min-width: 400px;
+    overflow-x: auto;
+    overflow-y: hidden;/**/
 }
-.hiper{
+
+.hiper {
     height: 86px;
-    width: 15%;
-    margin-left: 9%;
+    width: 210px;
+    margin-left: 100px;/**/
     margin-top: 7px;
     float: left;
     background-color: white;
-    text-align: center;
 }
-h3{
+
+#SSS {
     position: absolute;
-    top:100px;
+    top: 110px;
     text-align: center;
+    width: 100%;
+    height: auto;
+}
+
+button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+#sponsored {
+    position: absolute;
+    bottom: 123px;
+    left: 2%;
+}
+
+#menu {
+    padding: 15px;
 }
