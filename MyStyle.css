@@ -103,7 +103,7 @@ img {
 }
 #namePlanet{
     position: absolute;
-    bottom: 110px;
+    bottom: 23%;
     left: 2%;
 }
 #planetProp{
@@ -126,7 +126,7 @@ img {
     height: 20%;
     bottom: 20px;
     text-align: center;
-    background: #4acf92;
+    background: rgba(37, 40, 39, 0.35);
 }
 #tablaPropUno{
     padding: 20px;
@@ -138,15 +138,12 @@ img {
     text-align: left;
     height: 20%;
     margin-left: 50%;
-    background-color: aqua;
+    background-color: rgba(69, 69, 69, 0.54);
 }
 #HolaDos{
     padding-left: 20px;
 }
-#PlanetaImg{
-    padding: 10%;
-    float: right;
-}
+
 #myCanvas{
     width: 20%;
     height: 20%;
