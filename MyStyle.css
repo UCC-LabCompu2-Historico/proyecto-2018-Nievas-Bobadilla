@@ -143,3 +143,8 @@ img {
 #HolaDos{
     padding-left: 20px;
 }
+#myCanvas{
+    width: 20%;
+    height: 20%;
+    border-color: cornflowerblue;
+}
