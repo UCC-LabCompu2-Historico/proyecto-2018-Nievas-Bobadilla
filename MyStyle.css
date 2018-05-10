@@ -1,3 +1,4 @@
+
 body {
     text-align: center;
     margin: 0px;
@@ -37,7 +38,7 @@ img {
 
 }
 
-#pieDePagina {
+.pieDePagina {
     position: absolute;
     width: 100%;
     bottom: 0px;
@@ -118,4 +119,27 @@ img {
 
 #menu {
     padding: 15px;
+}
+#planetPropUno{
+    position: absolute;
+    width: 50%;
+    height: 20%;
+    bottom: 20px;
+    text-align: center;
+    background: #4acf92;
+}
+#tablaPropUno{
+    padding: 20px;
+}
+#planetPropDos{
+    position: absolute;
+    width: 50%;
+    bottom: 20px;
+    text-align: left;
+    height: 20%;
+    margin-left: 50%;
+    background-color: aqua;
+}
+#HolaDos{
+    padding-left: 20px;
 }
