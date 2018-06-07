@@ -17,6 +17,11 @@
     <button class="button2" id="botonReset">Restablecer</button>
 
 </div>
+<div id="canvasContainer">
+    <canvas id="myCanvas">
+        Your browser does not support the HTML5 canvas tag.
+    </canvas>
+</div>
 <div id="namePlanet">
     VENUS
 </div>
@@ -30,15 +35,15 @@
         <tbody>
         <tr>
             <td>Periodo Orbital: </td>
-            <td>225 días</td>
+            <td><input id="inputPeriodoOrbital"></td>
         </tr>
         <tr>
             <td>Velocidad Orbital: </td>
-            <td>35.0 [m/s]</td>
+            <td><input id="inputVelocidadOrbital"></td>
         </tr>
         <tr>
             <td>Distancia maxima del sol: </td>
-            <td>108,2 M km</td>
+            <td><input id="inputDistanciaSol"></td>
         </tr>
         </tbody>
     </table>
@@ -65,11 +70,6 @@
         </tr>
         </tbody>
     </table>
-</div>
-<div>
-    <canvas id="myCanvas">
-        Your browser does not support the HTML5 canvas tag.
-    </canvas>
 </div>
 <div class="pieDePagina">
     Hecho en la facultad de ingeniería de la Universidad Católica de Córdoba por Bobadilla y Nievas
