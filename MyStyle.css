@@ -136,20 +136,15 @@ img {
     width: 50%;
     height: 20%;
     bottom: 20px;
-    text-align: center;
+    text-align: left;
     background: rgba(37, 40, 39, 0.35);
 }
-
-#tablaPropUno {
-    padding: 20px;
-}
-
 #planetPropDos {
     position: absolute;
     width: 50%;
+    height: 20%;
     bottom: 20px;
     text-align: left;
-    height: 20%;
     margin-left: 50%;
     background-color: rgba(69, 69, 69, 0.54);
 }
