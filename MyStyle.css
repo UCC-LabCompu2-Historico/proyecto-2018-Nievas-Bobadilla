@@ -81,8 +81,17 @@ img {
     width: 100%;
     height: auto;
     text-align: center;
-}
 
+}
+#button1{
+
+    height: 50px;
+    width: 10%;
+    font-family: sans-serif;
+    font-size: 100%;
+    background-color: cornflowerblue;
+    color: #fafffe;
+}
 .button2 {
     font-family: sans-serif;
     font-size: 100%;
