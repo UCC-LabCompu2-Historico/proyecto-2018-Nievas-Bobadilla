@@ -9,7 +9,7 @@ function descargarValor(){
     console.log(planeta);
 }
 
-function Cara() {
+function activarCanvas() {
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
     ctx.beginPath();
