@@ -1,7 +1,7 @@
+let multiplicadorVelocidad = 1;
+
 function cargarValor() {
-    planeta = document.getElementById("selectPlaneta").value;
-    let urlVar = 'simulador.html#' + planeta;
-    window.location.assign(urlVar);
+    window.location.assign('simulador.html#' + document.getElementById("selectPlaneta").value);
 }
 
 function activarCanvas() {
@@ -11,7 +11,6 @@ function activarCanvas() {
 
     //carga en constanes de todos los elementos del HTML utilizados en esta funcion
     const namePlanet = document.getElementsByClassName("namePlanet");
-    const botonEdit = document.getElementById("botonEdit");
     const inputPeriodoOrbital = document.getElementById("inputPeriodoOrbital");
     const inputVelocidadOrbital = document.getElementById("inputVelocidadOrbital");
     const inputDistanciaSol = document.getElementById("inputDistanciaSol");
@@ -73,7 +72,7 @@ function activarCanvas() {
     let origenY;
 
     //se declara variable radio, que es la distancia que hay dede el origen del sistema solar hasta donde esta el cursor
-    let radio = 0;
+    let radio = 300;
 
     //se crean variables locales de las variables que el usuario puede cambiar para poder restaurarlas a sus valores originales
     let periodoOrbital = periodoOrbitalOriginal;
@@ -107,21 +106,25 @@ function activarCanvas() {
     function dibujarSistema() {
         origenX = canvas.offsetLeft + canvas.offsetWidth / 2;
         origenY = canvas.offsetTop + canvas.offsetHeight / 2;
-        if (planeta < 4) {
+        if (!(planeta >= 0 && planeta <= 9)) {
+            planeta = 8;
+            window.location.assign('simulador.html#8');
+        }
+        if ((planeta >= 4 && planeta <= 7) || planeta === 9) {
+            planetaInicial = 4; //jupiter
+            factorDistancia = factorDistanciaExterno;
+            factorTiempo = factorTiempoExterno;
+        }
+        if ((planeta >= 0 && planeta <= 3) || planeta === 8) {
             planetaInicial = 0; //mercurio
             factorDistancia = factorDistanciaInterno;
             factorTiempo = factorTiempoInterno;
-            botonEdit.innerHTML = 'Sistema solar externo';
-        } else {
-            if (planeta < 8) {
-                planetaInicial = 4; //jupiter
-                factorDistancia = factorDistanciaExterno;
-                factorTiempo = factorTiempoExterno;
-                botonEdit.innerHTML = 'Sistema solar interno';
-            }
-            else {
-                planeta = null;
-            }
+        }
+        if (planeta === 8) {
+            namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">SISTEMA SOLAR INTERNO</p>';
+        }
+        if (planeta === 9) {
+            namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">SISTEMA SOLAR EXTERNO</p>';
         }
         for (i = 0; i < 4; i++) {
             anchoLineaOrbita[planetaInicial + i] = 1;
@@ -130,26 +133,29 @@ function activarCanvas() {
             if ((planetaInicial + i) === planeta) {
                 anchoLineaOrbita[planetaInicial + i] = 3;
                 namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">' + nombreDelPlaneta[planetaInicial + i] + '</p>';
-                i = 4;
+                i = 5;
             }
         }
-        for (i = 0; i < 4; i++) {
-            if (radio < radioSol + 5) {
-                namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">SOL</p>';
-                aumentarSol = true;
-                i = 4;
-            }
-            if ((radio < (distanciaAlSol[planetaInicial + i] + 5) && radio > (distanciaAlSol[planetaInicial + i] - 5))) {
-                anchoLineaOrbita[planetaInicial + i] = 3;
-                namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">' + nombreDelPlaneta[planetaInicial + i] + '</p>';
-                i = 4;
+        if (radio < radioSol + 5) {
+            namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">SOL</p>';
+            aumentarSol = true;
+            i = 5;
+        } else {
+            for (i = 0; i < 4; i++) {
+
+                if ((radio < (distanciaAlSol[planetaInicial + i] + 5) && radio > (distanciaAlSol[planetaInicial + i] - 5))) {
+                    anchoLineaOrbita[planetaInicial + i] = 3;
+                    namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">' + nombreDelPlaneta[planetaInicial + i] + '</p>';
+                    i = 5;
+                }
             }
         }
         if (primero) {
-            if (planeta < 8 && planeta >= 0)
+            if (planeta <= 7 && planeta >= 0)
                 seleccionarPlaneta();
             primero = false;
         }
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         for (i = 0; i < 4; i++) {
             ctx.beginPath();
@@ -160,7 +166,7 @@ function activarCanvas() {
             ctx.beginPath();
             ctx.lineWidth = 1;
             ctx.arc(150 + distanciaAlSol[planetaInicial + i] * Math.cos(anguloPlaneta[planetaInicial + i]), 150 + distanciaAlSol[planetaInicial + i] * Math.sin(anguloPlaneta[planetaInicial + i]), radioDelPlanetaPixeles[planetaInicial + i] + (anchoLineaOrbita[planetaInicial + i] - 1) * 2, 0, Math.PI * 2, true);
-            anguloPlaneta[planetaInicial + i] += (retardo) / (periodoOrbital[planetaInicial + i] / (2 * Math.PI));   //  (milisegundos que demora en refrezcarse el simulador) / (milisegundos que demora el planeta i en hacer un radian)
+            anguloPlaneta[planetaInicial + i] += multiplicadorVelocidad * (retardo) / (periodoOrbital[planetaInicial + i] / (2 * Math.PI));   //  (milisegundos que demora en refrezcarse el simulador) / (milisegundos que demora el planeta i en hacer un radian)
             ctx.fillStyle = colorDelPlaneta[planetaInicial + i];
             ctx.fill();
             ctx.stroke();
@@ -177,23 +183,28 @@ function activarCanvas() {
     }
 
     function seleccionarPlaneta() {
-        if (planeta < 4) {
-            planetaInicial = 0; //mercurio
-        } else {
-            if (planeta < 8) {
-                planetaInicial = 4; //jupiter
-            }
-            else {
-                planeta = null;
-            }
-        }
         for (i = 0; i < 4; i++) {
             if (radio < (distanciaAlSol[planetaInicial + i] + 5) && radio > (distanciaAlSol[planetaInicial + i] - 5)) {
                 planeta = planetaInicial + i;
-                i = 4;
+                i = 5;
             }
         }
-        if (planeta != null) {
+        if (i === 4 && !primero) {
+            if (planetaInicial === 4) {
+                planeta = 9;
+            }
+            if (planetaInicial === 0) {
+                planeta = 8;
+            }
+            namePlanet[1].innerHTML = '';
+            inputPeriodoOrbital.value = '';
+            inputVelocidadOrbital.value = '';
+            inputDistanciaSol.value = '';
+            inputRadioPlaneta.value = '';
+            inputMasaPlaneta.value = '';
+            inputTempMedia.value = '';
+        }
+        if (planeta !== 8 && planeta !== 9) {
             namePlanet[1].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">' + nombreDelPlaneta[planeta] + '</p>';
             inputPeriodoOrbital.value = (periodoOrbital[planeta] * factorTiempo).toFixed(2) + " dias";
             inputVelocidadOrbital.value = (velocidadOrbital[planeta] * factorDistancia / factorTiempo).toFixed(2) + " millones de km por dia";
@@ -209,8 +220,28 @@ function activarCanvas() {
     }
 
 
-    //-------------------------------------------------------------------------INTERVALO-------------------------------------------------------------------------//
+//-------------------------------------------------------------------------INTERVALO-------------------------------------------------------------------------//
 
-    //se llama a la funcion dibujarSistema() cada un tiempo equivalente a la constante retardo
+//se llama a la funcion dibujarSistema() cada un tiempo equivalente a la constante retardo
     setInterval(dibujarSistema, retardo);
+}
+
+function cambiarNivelInterno() {
+    window.location.assign('simulador.html#8');
+    location.reload();
+}
+
+function cambiarNivelExterno() {
+    window.location.assign('simulador.html#9');
+    location.reload();
+}
+
+function disminuirVelocidad() {
+    if(multiplicadorVelocidad / 1.62){  //para que nunca llegue a 0
+        multiplicadorVelocidad /= 1.62;
+    }
+}
+
+function aumentarVelocidad() {
+    multiplicadorVelocidad *= 1.62;
 }
