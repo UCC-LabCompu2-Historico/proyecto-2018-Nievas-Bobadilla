@@ -7,19 +7,18 @@ function cargarValor() {
 function activarCanvas() {
 
 
-
-
-
     //-------------------------------------------------------------------------CONSTANTES-------------------------------------------------------------------------//
 
     //carga en constanes de todos los elementos del HTML utilizados en esta funcion
+    const namePlanet = document.getElementsByClassName("namePlanet");
+    const botonEdit = document.getElementById("botonEdit");
     const inputPeriodoOrbital = document.getElementById("inputPeriodoOrbital");
     const inputVelocidadOrbital = document.getElementById("inputVelocidadOrbital");
     const inputDistanciaSol = document.getElementById("inputDistanciaSol");
     const inputMasaPlaneta = document.getElementById("inputMasaPlaneta");
     const inputRadioPlaneta = document.getElementById("inputRadioPlaneta");
     const inputTempMedia = document.getElementById("inputTempMedia");
-    const canvas = document.getElementById("myCanvas");
+    const canvas = document.getElementById("canvas");
 
     //carga del contexto del canvas
     const ctx = canvas.getContext("2d");
@@ -46,7 +45,7 @@ function activarCanvas() {
     const radioDelPlanetaPixeles = [3, 4, 5, 4, 5, 4, 3, 3]; //[px]
 
     //otras constatnes, que son imprimidas en los inputs directamente, el usuario no opera sobre ellos ni sobre una copia de ellos
-    const nombreDelPlaneta = ["Mercurio", "Venus", "Tierra", "Marte", "Jupiter", "Saturno", "Urano", "Neptuno"];
+    const nombreDelPlaneta = ["MERCURIO", "VENUS", "TIERRA", "MARTE", "JUPITER", "SATURNO", "URANO", "NEPTUNO"];
     const colorDelPlaneta = ["#b76146", "#f5da5b", "#88eed5", "#e74413", "#ff997f", "#ffe488", "#0759ff", "#e3fffd"];
     const masaDelPlaneta = ["3,59 x 10 ^ 23 kg", "4,9 x 10 ^ 24 kg", "5,98 x 10 ^ 24 kg", "6,58 x 10 ^ 23 kg", "1,9 x 10 ^ 27 kg", "5,69 x 10 ^ 26 kg", "8,73 x 10 ^ 25 kg", "1,03 x 10 ^ 26 kg"];
     const radioDelPlaneta = ["4,9 x 10 ^6 km", "12,1 x 10 ^6 km", "12,8 x 10 ^6 km", "6,8 x 10 ^6 km", "143 x 10 ^6 km", "108,7 x 10 ^6 km", "51,1 x 10 ^6 km", "49,5 x 10 ^6 km"];
@@ -59,7 +58,7 @@ function activarCanvas() {
 
     //-------------------------------------------------------------------------VARIABLES-------------------------------------------------------------------------//
 
-    //se carga el planeta elegido por el ussuario en la pagini index
+    //se carga el planeta elegido por el ussuario en la pagina index
     let planeta = parseInt(window.location.hash.split('#')[1]);
 
     //sirve para saber si es el sistema solar externo o interno. Su valor es la posicion del primer planeta en el nivel elegido (interno o externo) del sistema solar
@@ -81,12 +80,16 @@ function activarCanvas() {
     let velocidadOrbital = velocidadOrbitalOriginal;
     let distanciaAlSol = distanciaAlSolOriginal;
 
-    //se declaran variables auxiliares para almacenar el angulo recorrido por un planeta y el ancho de la orbita de un planeta cuando el cursor (cambia cuando el cursor esta sobre la orbita)
+    //se declaran variables auxiliares para almacenar el angulo recorrido por un planeta, el ancho de la orbita de un planeta cuando el cursor (cambia cuando el cursor esta sobre la orbita) y si hay que aumentar el tamaño del sol
     let anguloPlaneta = [0, 0, 0, 0, 0, 0, 0, 0];
     let anchoLineaOrbita = [1, 1, 1, 1, 1, 1, 1, 1];
+    let aumentarSol = false;
 
     //se declara el indice que se va a usar como contador en todos los ciclos for
     let i;
+
+    //se guarda false si la funcion dibujarSistema() fue llamada por lo menos una vez, si no es true
+    let primero = true;
 
 
     //-------------------------------------------------------------------------EVENTOS-------------------------------------------------------------------------//
@@ -108,19 +111,44 @@ function activarCanvas() {
             planetaInicial = 0; //mercurio
             factorDistancia = factorDistanciaInterno;
             factorTiempo = factorTiempoInterno;
+            botonEdit.innerHTML = 'Sistema solar externo';
         } else {
-            planetaInicial = 4; //jupiter
-            factorDistancia = factorDistanciaExterno;
-            factorTiempo = factorTiempoExterno;
+            if (planeta < 8) {
+                planetaInicial = 4; //jupiter
+                factorDistancia = factorDistanciaExterno;
+                factorTiempo = factorTiempoExterno;
+                botonEdit.innerHTML = 'Sistema solar interno';
+            }
+            else {
+                planeta = null;
+            }
         }
         for (i = 0; i < 4; i++) {
             anchoLineaOrbita[planetaInicial + i] = 1;
         }
         for (i = 0; i < 4; i++) {
-            console.log(planetaInicial + i, planeta);
-            if ((radio < (distanciaAlSol[planetaInicial + i] + 5) && radio > (distanciaAlSol[planetaInicial + i] - 5)) || (planetaInicial + i) === planeta) {
+            if ((planetaInicial + i) === planeta) {
                 anchoLineaOrbita[planetaInicial + i] = 3;
+                namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">' + nombreDelPlaneta[planetaInicial + i] + '</p>';
+                i = 4;
             }
+        }
+        for (i = 0; i < 4; i++) {
+            if (radio < radioSol + 5) {
+                namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">SOL</p>';
+                aumentarSol = true;
+                i = 4;
+            }
+            if ((radio < (distanciaAlSol[planetaInicial + i] + 5) && radio > (distanciaAlSol[planetaInicial + i] - 5))) {
+                anchoLineaOrbita[planetaInicial + i] = 3;
+                namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">' + nombreDelPlaneta[planetaInicial + i] + '</p>';
+                i = 4;
+            }
+        }
+        if (primero) {
+            if (planeta < 8 && planeta >= 0)
+                seleccionarPlaneta();
+            primero = false;
         }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         for (i = 0; i < 4; i++) {
@@ -140,30 +168,39 @@ function activarCanvas() {
         }
         ctx.beginPath();
         ctx.lineWidth = 1;
-        ctx.arc(150 , 150 , radioSol, 0, Math.PI * 2, true);
+        ctx.arc(150, 150, radioSol + aumentarSol * 4, 0, Math.PI * 2, true);
         ctx.fillStyle = colorSol;
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
-        inputPeriodoOrbital.value = (periodoOrbital[planeta] * factorTiempo).toFixed(2) + " dias";
-        inputVelocidadOrbital.value = (velocidadOrbital[planeta] * factorDistancia / factorTiempo).toFixed(2) + " millones de km por dia";
-        inputDistanciaSol.value = (distanciaAlSol[planeta] * factorDistancia).toFixed(2) + " millones de km";
-        inputRadioPlaneta.value = radioDelPlaneta[planeta];
-        inputMasaPlaneta.value = masaDelPlaneta[planeta];
-        inputTempMedia.value = temperaturaMedia[planeta];
+        aumentarSol = false;
     }
 
     function seleccionarPlaneta() {
         if (planeta < 4) {
             planetaInicial = 0; //mercurio
         } else {
-            planetaInicial = 4; //jupiter
+            if (planeta < 8) {
+                planetaInicial = 4; //jupiter
+            }
+            else {
+                planeta = null;
+            }
         }
         for (i = 0; i < 4; i++) {
             if (radio < (distanciaAlSol[planetaInicial + i] + 5) && radio > (distanciaAlSol[planetaInicial + i] - 5)) {
                 planeta = planetaInicial + i;
                 i = 4;
             }
+        }
+        if (planeta != null) {
+            namePlanet[1].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">' + nombreDelPlaneta[planeta] + '</p>';
+            inputPeriodoOrbital.value = (periodoOrbital[planeta] * factorTiempo).toFixed(2) + " dias";
+            inputVelocidadOrbital.value = (velocidadOrbital[planeta] * factorDistancia / factorTiempo).toFixed(2) + " millones de km por dia";
+            inputDistanciaSol.value = (distanciaAlSol[planeta] * factorDistancia).toFixed(2) + " millones de km";
+            inputRadioPlaneta.value = radioDelPlaneta[planeta];
+            inputMasaPlaneta.value = masaDelPlaneta[planeta];
+            inputTempMedia.value = temperaturaMedia[planeta];
         }
     }
 
