@@ -25,7 +25,7 @@ function activarCanvas() {
     //retardo que va a haber entre cuadro y cuadro, en milisegundos
     const retardo = 10;
 
-    //valores orbitales de los planetas, expresados en unidades sobre las que la funcion dibujarSistema() puede operar directamnete, para cargarlas en un input, deben obtenerse los valores reales usando los dos bloques de constants anteriores
+    //valores orbitales de los planetas, expresados en unidades sobre las que la funcion dibujarSistema() puede operar directamnete
     const periodoOrbitalMilisegundos = [2169, 5535, 9000, 16926, 1272, 3159, 9000, 17658];
     const distanciaAlSolPixeles = [32.5, 61.75, 83.42, 130, 23, 41.17, 82.33, 130];
     const radioDelPlanetaPixeles = [3, 4, 5, 4, 5, 4, 3, 3];
@@ -101,7 +101,7 @@ function activarCanvas() {
         /*
         Significado de los valores de la variable planeta
 
-            planetas del sistema soalr interno
+            planetas del sistema solar interno
             0: MERCURIO
             1: VENUS
             2: TIERRA
