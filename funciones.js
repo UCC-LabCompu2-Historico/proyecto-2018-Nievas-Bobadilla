@@ -4,13 +4,18 @@ function cargarValor() {
     window.location.assign('simulador.html#' + document.getElementById("selectPlaneta").value);
 }
 
+/**
+ * Encargado de todas las funcionalidades del canvas y los inputs, que se refrescan cada 10 ms, absorbiendo los eventos mousedown y mousemove para darle interaccion con el usuario al simulador
+ * @method activarCanvas
+ */
 function activarCanvas() {
 
 
     //-------------------------------------------------------------------------CONSTANTES-------------------------------------------------------------------------//
 
-    //carga en constanes de todos los elementos del HTML utilizados en esta funcion
-    const namePlanet = document.getElementsByClassName("namePlanet");
+    //carga de todos los elementos del HTML utilizados en esta funcion
+    const planetaSeleccionadoSuperior = document.getElementsByClassName("planetaSeleccionado")[0];
+    const planetaSeleccionadoInferior = document.getElementsByClassName("planetaSeleccionado")[1];
     const inputPeriodoOrbital = document.getElementById("inputPeriodoOrbital");
     const inputVelocidadOrbital = document.getElementById("inputVelocidadOrbital");
     const inputDistanciaSol = document.getElementById("inputDistanciaSol");
@@ -25,20 +30,113 @@ function activarCanvas() {
     //retardo que va a haber entre cuadro y cuadro, en milisegundos
     const retardo = 10;
 
-    //valores orbitales de los planetas, expresados en unidades sobre las que la funcion dibujarSistema() puede operar directamnete
-    const periodoOrbitalMilisegundos = [2169, 5535, 9000, 16926, 1272, 3159, 9000, 17658];
-    const distanciaAlSolPixeles = [32.5, 61.75, 83.42, 130, 23, 41.17, 82.33, 130];
-    const radioDelPlanetaPixeles = [3, 4, 5, 4, 5, 4, 3, 3];
-
-    //otras constatnes, que son imprimidas en los inputs directamente, el usuario no opera sobre ellos ni sobre una copia de ellos
-    const nombreDelPlaneta = ["MERCURIO", "VENUS", "TIERRA", "MARTE", "JUPITER", "SATURNO", "URANO", "NEPTUNO"];
-    const periodoOrbital = ["88 dias", "224,7 dias", "365,25 dias", "687 dias", "4332 dias", "10775 dias", "30681 dias", "60193 dias"];
-    const velocidadOrbital = ["4,14 millones de km por dia", "3,02 millones de km por dia", "2,57 millones de km por dia", "2,08 millones de km por dia", "1132 miles de km por dia", "829 miles de km por dia", "588 miles de km por dia", "467 miles de km por dia"];
-    const distanciaAlSol = ["57,9 millones de km", "108,2 millones de km", "146,6 millones de km", "227,9 millones de km", "778,3 millones de km", "1429,4 millones de km", "2871 millones de km", "4504,3 millones de km"];
-    const colorDelPlaneta = ["#b76146", "#f5da5b", "#88eed5", "#e74413", "#ff997f", "#ffe488", "#0759ff", "#e3fffd"];
-    const masaDelPlaneta = ["3,59 x 10 ^ 23 kg", "4,9 x 10 ^ 24 kg", "5,98 x 10 ^ 24 kg", "6,58 x 10 ^ 23 kg", "1,9 x 10 ^ 27 kg", "5,69 x 10 ^ 26 kg", "8,73 x 10 ^ 25 kg", "1,03 x 10 ^ 26 kg"];
-    const radioDelPlaneta = ["4,9 x 10 ^6 km", "12,1 x 10 ^6 km", "12,8 x 10 ^6 km", "6,8 x 10 ^6 km", "143 x 10 ^6 km", "108,7 x 10 ^6 km", "51,1 x 10 ^6 km", "49,5 x 10 ^6 km"];
-    const temperaturaMedia = ["166,85 °C", "456,85 °C", "14,85 °C", "-46,15 °C", "-121,15 °C", "-139,15 °C", "-197,15 °C", "-220,15 °C"];
+    //informacion de cada planeta, util para su graficacion y para mostrar datos en los inputs
+    const parametrosPlanetarios = [
+        {
+            nombreDelPlaneta: "MERCURIO",
+            periodoOrbital: "88 dias",
+            velocidadOrbital: "4,14 millones de km por dia",
+            distanciaAlSol: "57,9 millones de km",
+            colorDelPlaneta: "#b76146",
+            masaDelPlaneta: "3,59 x 10 ^ 23 kg",
+            radioDelPlaneta: "4,9 x 10 ^ 6 km",
+            temperaturaMedia: "166,85 °C",
+            periodoOrbitalMilisegundos: 2169,
+            distanciaAlSolPixeles: 32,
+            radioDelPlanetaPixeles: 3,
+        },
+        {
+            nombreDelPlaneta: "VENUS",
+            periodoOrbital: "224,7 dias",
+            velocidadOrbital: "3,02 millones de km por dia",
+            distanciaAlSol: "108,2 millones de km",
+            colorDelPlaneta: "#f5da5b",
+            masaDelPlaneta: "4,9 x 10 ^ 24 kg",
+            radioDelPlaneta: "12,1 x 10 ^ 6 km",
+            temperaturaMedia: "456,85 °C",
+            periodoOrbitalMilisegundos: 5535,
+            distanciaAlSolPixeles: 62,
+            radioDelPlanetaPixeles: 4,
+        },
+        {
+            nombreDelPlaneta: "TIERRA",
+            periodoOrbital: "365,25 dias",
+            velocidadOrbital: "2,57 millones de km por dia",
+            distanciaAlSol: "146,6 millones de km",
+            colorDelPlaneta: "#88eed5",
+            masaDelPlaneta: "5,98 x 10 ^ 24 kg",
+            radioDelPlaneta: "12,8 x 10 ^ 6 km",
+            temperaturaMedia: "14,85 °C",
+            periodoOrbitalMilisegundos: 9000,
+            distanciaAlSolPixeles: 83,
+            radioDelPlanetaPixeles: 5,
+        },
+        {
+            nombreDelPlaneta: "MARTE",
+            periodoOrbital: "687 dias",
+            velocidadOrbital: "2,08 millones de km por dia",
+            distanciaAlSol: "227,9 millones de km",
+            colorDelPlaneta: "#e74413",
+            masaDelPlaneta: "6,58 x 10 ^ 23 kg",
+            radioDelPlaneta: "6,8 x 10 ^ 6 km",
+            temperaturaMedia: "-46,15 °C",
+            periodoOrbitalMilisegundos: 16926,
+            distanciaAlSolPixeles: 130,
+            radioDelPlanetaPixeles: 4,
+        },
+        {
+            nombreDelPlaneta: "JUPITER",
+            periodoOrbital: "4332 dias",
+            velocidadOrbital: "1132 miles de km por dia",
+            distanciaAlSol: "778,3 millones de km",
+            colorDelPlaneta: "#ff997f",
+            masaDelPlaneta: "1,9 x 10 ^ 27 kg",
+            radioDelPlaneta: "143 x 10 ^ 6 km",
+            temperaturaMedia: "-121,15 °C",
+            periodoOrbitalMilisegundos: 1272,
+            distanciaAlSolPixeles: 23,
+            radioDelPlanetaPixeles: 5,
+        },
+        {
+            nombreDelPlaneta: "SATURNO",
+            periodoOrbital: "10775 dias",
+            velocidadOrbital: "829 miles de km por dia",
+            distanciaAlSol: "1429,4 millones de km",
+            colorDelPlaneta: "#ffe488",
+            masaDelPlaneta: "5,69 x 10 ^ 26 kg",
+            radioDelPlaneta: "108,7 x 10 ^ 6 km",
+            temperaturaMedia: "-139,15 °C",
+            periodoOrbitalMilisegundos: 3159,
+            distanciaAlSolPixeles: 41,
+            radioDelPlanetaPixeles: 4,
+        },
+        {
+            nombreDelPlaneta: "URANO",
+            periodoOrbital: "30681 dias",
+            velocidadOrbital: "588 miles de km por dia",
+            distanciaAlSol: "2871 millones de km",
+            colorDelPlaneta: "#0759ff",
+            masaDelPlaneta: "8,73 x 10 ^ 25 kg",
+            radioDelPlaneta: "51,1 x 10 ^6 km",
+            temperaturaMedia: "-197,15 °C",
+            periodoOrbitalMilisegundos: 9000,
+            distanciaAlSolPixeles: 82,
+            radioDelPlanetaPixeles: 3,
+        },
+        {
+            nombreDelPlaneta: "NEPTUNO",
+            periodoOrbital: "60193 dias",
+            velocidadOrbital: "467 miles de km por dia",
+            distanciaAlSol: "4504,3 millones de km",
+            colorDelPlaneta: "#e3fffd",
+            masaDelPlaneta: "1,03 x 10 ^ 26 kg",
+            radioDelPlaneta: "49,5 x 10 ^ 6 km",
+            temperaturaMedia: "-220,15 °C",
+            periodoOrbitalMilisegundos: 17658,
+            distanciaAlSolPixeles: 130,
+            radioDelPlanetaPixeles: 3,
+        },
+    ];
 
     //parametros del sol
     const radioSol = 10;
@@ -67,7 +165,7 @@ function activarCanvas() {
     let origenYRelativo;
 
     //se declara variable radio, que es la distancia que hay dede el origen del sistema solar hasta donde esta el cursor
-    let radio = 150;
+    let radio = 200;
 
     //se declaran variables auxiliares para almacenar el angulo recorrido por un planeta, el ancho de la orbita de un planeta cuando el cursor (cambia cuando el cursor esta sobre la orbita) y si hay que aumentar el tamaño del sol
     let anguloPlaneta = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -92,7 +190,10 @@ function activarCanvas() {
 
     //-------------------------------------------------------------------------FUNCIONES-------------------------------------------------------------------------//
 
-    //funcion principal, para dibujar sobre el canvas el sistema solar en el nivel elegido, tambien se encarga de mostrar arriba del canvas el planeta sobre el que esta el cursor
+    /**
+     * Actualiza las variables que indican la posicion del origen del sistema solar, imprime el planeta seleccionado, el planeta sobre el que se posa el cursor, y grafica todo el canvas
+     * @method dibujarSistema
+     */
     function dibujarSistema() {
         origenXRelativo = canvas.offsetWidth / 2;
         origenYRelativo = canvas.offsetHeight / 2;
@@ -130,10 +231,10 @@ function activarCanvas() {
             planetaInicial = 0; //mercurio
         }
         if (planeta === 8) {
-            namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">SISTEMA SOLAR INTERNO</p>';
+            planetaSeleccionadoSuperior.innerHTML = '<p class="textoPlanetaSeleccionado">SISTEMA SOLAR INTERNO</p>';
         }
         if (planeta === 9) {
-            namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">SISTEMA SOLAR EXTERNO</p>';
+            planetaSeleccionadoSuperior.innerHTML = '<p class="textoPlanetaSeleccionado">SISTEMA SOLAR EXTERNO</p>';
         }
         for (i = 0; i < 4; i++) {
             anchoLineaOrbita[planetaInicial + i] = anchoMinimo;
@@ -141,19 +242,19 @@ function activarCanvas() {
         for (i = 0; i < 4; i++) {
             if ((planetaInicial + i) === planeta) {
                 anchoLineaOrbita[planetaInicial + i] = anchoMaximo;
-                namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">' + nombreDelPlaneta[planetaInicial + i] + '</p>';
+                planetaSeleccionadoSuperior.innerHTML = '<p class="textoPlanetaSeleccionado">' + parametrosPlanetarios[planetaInicial + i].nombreDelPlaneta + '</p>';
                 i = 5;
             }
         }
         if (radio < radioSol + 5) {
-            namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">SOL</p>';
+            planetaSeleccionadoSuperior.innerHTML = '<p class="textoPlanetaSeleccionado">SOL</p>';
             aumentarSol = true;
         } else {
             aumentarSol = false;
             for (i = 0; i < 4; i++) {
-                if ((radio < (distanciaAlSolPixeles[planetaInicial + i] + tolerancia) && radio > (distanciaAlSolPixeles[planetaInicial + i] - tolerancia))) {
+                if ((radio < (parametrosPlanetarios[planetaInicial + i].distanciaAlSolPixeles + tolerancia) && radio > (parametrosPlanetarios[planetaInicial + i].distanciaAlSolPixeles - tolerancia))) {
                     anchoLineaOrbita[planetaInicial + i] = anchoMaximo;
-                    namePlanet[0].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">' + nombreDelPlaneta[planetaInicial + i] + '</p>';
+                    planetaSeleccionadoSuperior.innerHTML = '<p class="textoPlanetaSeleccionado">' + parametrosPlanetarios[planetaInicial + i].nombreDelPlaneta + '</p>';
                     i = 5;
                 }
             }
@@ -167,14 +268,14 @@ function activarCanvas() {
         for (i = 0; i < 4; i++) {
             ctx.beginPath();
             ctx.lineWidth = anchoLineaOrbita[planetaInicial + i];
-            ctx.arc(origenXRelativo, origenYRelativo, distanciaAlSolPixeles[planetaInicial + i], 0, Math.PI * 2, true);
+            ctx.arc(origenXRelativo, origenYRelativo, parametrosPlanetarios[planetaInicial + i].distanciaAlSolPixeles, 0, Math.PI * 2, true);
             ctx.stroke();
             ctx.closePath();
             ctx.beginPath();
             ctx.lineWidth = anchoMinimo;
-            ctx.arc(origenXRelativo + distanciaAlSolPixeles[planetaInicial + i] * Math.cos(anguloPlaneta[planetaInicial + i]), origenYRelativo + distanciaAlSolPixeles[planetaInicial + i] * Math.sin(anguloPlaneta[planetaInicial + i]), radioDelPlanetaPixeles[planetaInicial + i] + (anchoLineaOrbita[planetaInicial + i] - 1) * 2, 0, Math.PI * 2, true);
-            anguloPlaneta[planetaInicial + i] += multiplicadorVelocidad * (retardo) / (periodoOrbitalMilisegundos[planetaInicial + i] / (2 * Math.PI));   //  (milisegundos que demora en refrezcarse el simulador) / (milisegundos que demora el planeta i en hacer un radian)
-            ctx.fillStyle = colorDelPlaneta[planetaInicial + i];
+            ctx.arc(origenXRelativo + parametrosPlanetarios[planetaInicial + i].distanciaAlSolPixeles * Math.cos(anguloPlaneta[planetaInicial + i]), origenYRelativo + parametrosPlanetarios[planetaInicial + i].distanciaAlSolPixeles * Math.sin(anguloPlaneta[planetaInicial + i]), parametrosPlanetarios[planetaInicial + i].radioDelPlanetaPixeles + (anchoLineaOrbita[planetaInicial + i] - 1) * 2, 0, Math.PI * 2, true);
+            anguloPlaneta[planetaInicial + i] += multiplicadorVelocidad * (retardo) / (parametrosPlanetarios[planetaInicial + i].periodoOrbitalMilisegundos / (2 * Math.PI));   //  (milisegundos que demora en refrezcarse el simulador) / (milisegundos que demora el planeta i en hacer un radian)
+            ctx.fillStyle = parametrosPlanetarios[planetaInicial + i].colorDelPlaneta;
             ctx.fill();
             ctx.stroke();
             ctx.closePath();
@@ -188,22 +289,25 @@ function activarCanvas() {
         ctx.closePath();
     }
 
-    //se activa cada vez que el usuario hace click. Si hace clik sobre un planeta, carga todos sus datos en los divs de las propiedades de los planetas, y cambia la variable planeta al elegido por el usuario
+    /**
+     * Carga la variable planeta segun la variable radio y las distancias al sol de los planetas, y carga los inputs segun corresponda
+     * @method seleccionarPlaneta
+     */
     function seleccionarPlaneta() {
         for (i = 0; i < 4; i++) {
-            if (radio < (distanciaAlSolPixeles[planetaInicial + i] + tolerancia) && radio > (distanciaAlSolPixeles[planetaInicial + i] - tolerancia)) {
+            if (radio < (parametrosPlanetarios[planetaInicial + i].distanciaAlSolPixeles + tolerancia) && radio > (parametrosPlanetarios[planetaInicial + i].distanciaAlSolPixeles - tolerancia)) {
                 planeta = planetaInicial + i;
                 i = 5;
             }
         }
-        if (i === 4 && !primero && radio < 150) {
+        if (i === 4 && !primero && radio < 200) {
             if (planetaInicial === 4) {
                 planeta = 9;
             }
             if (planetaInicial === 0) {
                 planeta = 8;
             }
-            namePlanet[1].innerHTML = '';
+            planetaSeleccionadoInferior.innerHTML = '';
             inputPeriodoOrbital.value = '';
             inputVelocidadOrbital.value = '';
             inputDistanciaSol.value = '';
@@ -212,17 +316,22 @@ function activarCanvas() {
             inputTempMedia.value = '';
         }
         if (planeta !== 8 && planeta !== 9) {
-            namePlanet[1].innerHTML = '<p style="font-size: 20px; margin-bottom: 2px;">' + nombreDelPlaneta[planeta] + '</p>';
-            inputPeriodoOrbital.value = periodoOrbital[planeta];
-            inputVelocidadOrbital.value = velocidadOrbital[planeta];
-            inputDistanciaSol.value = distanciaAlSol[planeta];
-            inputRadioPlaneta.value = radioDelPlaneta[planeta];
-            inputMasaPlaneta.value = masaDelPlaneta[planeta];
-            inputTempMedia.value = temperaturaMedia[planeta];
+            planetaSeleccionadoInferior.innerHTML = '<p class="textoPlanetaSeleccionado">' + parametrosPlanetarios[planeta].nombreDelPlaneta + '</p>';
+            inputPeriodoOrbital.value = parametrosPlanetarios[planeta].periodoOrbital;
+            inputVelocidadOrbital.value = parametrosPlanetarios[planeta].velocidadOrbital;
+            inputDistanciaSol.value = parametrosPlanetarios[planeta].distanciaAlSol;
+            inputRadioPlaneta.value = parametrosPlanetarios[planeta].radioDelPlaneta;
+            inputMasaPlaneta.value = parametrosPlanetarios[planeta].masaDelPlaneta;
+            inputTempMedia.value = parametrosPlanetarios[planeta].temperaturaMedia;
         }
+        window.location.assign('simulador.html#' + planeta);
     }
 
-    //se activa cada vez que el usuario mueve el cursor. Actualiza la varaible radio con la distancia que hay desde el centro del sistema solar hasta la posicion del cursor
+    /**
+     * Actualiza la variable radio segun la posicion del cursor con rspecto al origen del sistema solar
+     * @method actualizarRadio
+     * @param mousePosicion
+     */
     function actualizarRadio(mousePosicion) {
         radio = Math.sqrt((mousePosicion.clientX - origenXAbsoluto) * (mousePosicion.clientX - origenXAbsoluto) + (mousePosicion.clientY - origenYAbsoluto) * (mousePosicion.clientY - origenYAbsoluto));
     }
@@ -234,22 +343,38 @@ function activarCanvas() {
     setInterval(dibujarSistema, retardo);
 }
 
+/**
+ * Se traslada al sistema solar interno asignando un 8 al final de la URL y actualizando la pagina
+ * @method cambiarNivelInterno
+ */
 function cambiarNivelInterno() {
     window.location.assign('simulador.html#8');
     location.reload();
 }
 
+/**
+ * Se traslada al sistema solar externo asignando un 9 al final de la URL y actualizando la pagina
+ * @method cambiarNivelExterno
+ */
 function cambiarNivelExterno() {
     window.location.assign('simulador.html#9');
     location.reload();
 }
 
+/**
+ * Disminuye la variable global multiplicadorDeVelocidad
+ * @method disminuirVelocidad
+ */
 function disminuirVelocidad() {
     if (multiplicadorVelocidad / 1.62) {  //para que nunca llegue a 0
         multiplicadorVelocidad /= 1.62;
     }
 }
 
+/**
+ * Aumenta la variable global multiplicadorDeVelocidad
+ * @method aumentarVelocidad
+ */
 function aumentarVelocidad() {
     multiplicadorVelocidad *= 1.62;
 }

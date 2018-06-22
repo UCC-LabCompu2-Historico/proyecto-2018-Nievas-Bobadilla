@@ -1,8 +1,62 @@
-
 body {
-    margin: 0px;
+    margin: 0;
     min-width: 400px;
     font-family: Arial;
+}
+
+img {
+    width: auto;
+    height: 100%;
+}
+
+.headerSimul {
+    text-align: center;
+}
+
+.header {
+    top: 0;
+    position: absolute;
+    text-align: right;
+    height: 100px;
+    width: 100%;
+    background: #EEEEEE;
+}
+
+.alta {
+    width: 100%;
+    height: auto;
+
+}
+
+.footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    height: 20px;
+    text-align: center;
+}
+
+.hipervinculo {
+    height: 86px;
+    width: 210px;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 7px;
+    float: left;
+    background-color: white;
+    text-align: center;
+}
+
+.boton {
+    width: 200px;
+    height: 50px;
+    font-size: 100%;
+    margin: 10px 10px 10px;
+}
+
+.textoPlanetaSeleccionado {
+    font-size: 20px;
+    margin-bottom: 2px;
 }
 
 #titulo {
@@ -18,35 +72,7 @@ body {
     width: 75px;
 }
 
-.head {
-    top: 0px;
-    position: absolute;
-    text-align: right;
-    height: 100px;
-    width: 100%;
-    background: #EEEEEE;
-}
-
-img {
-    width: auto;
-    height: 100%;
-}
-
-.alta {
-    width: 100%;
-    height: auto;
-
-}
-
-.pieDePagina {
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    height: 20px;
-    text-align: center;
-}
-
-#sobrePie {
+#sponsors {
     position: absolute;
     height: 100px;
     bottom: 20px;
@@ -56,18 +82,7 @@ img {
     grid-template-columns: auto auto auto auto;
 }
 
-.hiper {
-    height: 86px;
-    width: 210px;
-    margin-left: 50px;
-    margin-right: 50px;
-    margin-top: 7px;
-    float: left;
-    background-color: white;
-    text-align: center;
-}
-
-#SSS {
+#subtitulo {
     position: absolute;
     top: 110px;
     width: 100%;
@@ -75,7 +90,7 @@ img {
     text-align: center;
 }
 
-#botn {
+#contenedorBoton1 {
     position: absolute;
     top: 50%;
     width: 100%;
@@ -83,32 +98,14 @@ img {
     text-align: center;
 
 }
-#button1{
-    height: 50px;
-    width: 10%;
-    font-size: 100%;
-}
 
-.button2 {
-    width: 200px;
-    height: 50px;
-    font-size: 100%;
-    margin: 10px 10px 10px;
-}
-
-#namePlanetInferior {
+#planetaSeleccionadoInferior {
     position: absolute;
     bottom: 23%;
     left: 2%;
 }
 
-#planetProp {
-    position: absolute;
-    bottom: 85px;
-    left: 5%;
-}
-
-#sponsored {
+#sponsoredBy {
     position: absolute;
     bottom: 123px;
     left: 2%;
@@ -118,7 +115,7 @@ img {
     padding: 15px;
 }
 
-#planetPropUno {
+#contenedorPropiedadesOrbitales {
     position: absolute;
     width: 50%;
     height: 20%;
@@ -126,7 +123,8 @@ img {
     text-align: left;
     background: rgba(37, 40, 39, 0.35);
 }
-#planetPropDos {
+
+#contenedorPropiedadesFisicas {
     position: absolute;
     width: 50%;
     height: 20%;
@@ -136,14 +134,8 @@ img {
     background-color: rgba(69, 69, 69, 0.54);
 }
 
-#HolaDos {
-    padding-left: 20px;
-}
-
-.Pag2 {
-    text-align: center;
-}
-#canvasContainer{
+#contenedorCanvas {
     width: 100%;
     text-align: center;
 }
+

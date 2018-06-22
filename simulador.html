@@ -9,25 +9,26 @@
     <link rel="stylesheet" type="text/css" href="MyStyle.css">
     <script src="funciones.js" type="text/javascript"></script>
 </head>
-<body onload="activarCanvas()" >
-<div class="Pag2">
-    <div id="titulo2">
+<body onload="activarCanvas()">
+<div class="headerSimul">
+    <div id="tituloSimul">
         <h1>GALILEI PROJECT</h1>
     </div>
-    <button class="button2" id="sistemaInterno" onclick="cambiarNivelInterno()">Sistema solar interno</button>
-    <button class="button2" id="sistemaExterno" onclick="cambiarNivelExterno()">Sistema solar externo</button>
-    <button class="button2" id="disminuirVel" onclick="disminuirVelocidad()">Disminuir Velocidad</button>
-    <button class="button2" id="aumentarVel" onclick="aumentarVelocidad()">Aumentar Velocidad</button>
-    <div class="namePlanet"></div>
+    <button class="boton" id="sistemaInterno" onclick="cambiarNivelInterno()">Sistema solar interno</button>
+    <button class="boton" id="sistemaExterno" onclick="cambiarNivelExterno()">Sistema solar externo</button>
+    <button class="boton" id="disminuirVel" onclick="disminuirVelocidad()">Disminuir Velocidad</button>
+    <button class="boton" id="aumentarVel" onclick="aumentarVelocidad()">Aumentar Velocidad</button>
+    <button class="boton" onclick="location.href='index.html'">Volver a pagina principal</button>
+    <div class="planetaSeleccionado"></div>
 </div>
-<div id="canvasContainer">
+<div id="contenedorCanvas">
     <canvas id="canvas" width="300" height="300">
         Your browser does not support the HTML5 canvas tag.
     </canvas>
 </div>
-<div class="namePlanet" id="namePlanetInferior"></div>
-<div id="planetPropUno">
-    <table id="tablaPropUno">
+<div class="planetaSeleccionado" id="planetaSeleccionadoInferior"></div>
+<div id="contenedorPropiedadesOrbitales">
+    <table id="tablaPropiedadesOrbitales">
         <thead>
         <tr>
             <th>Propiedades Orbitales</th>
@@ -35,22 +36,22 @@
         </thead>
         <tbody>
         <tr>
-            <td>Periodo Orbital: </td>
+            <td>Periodo Orbital:</td>
             <td><input id="inputPeriodoOrbital" readonly="readonly"></td>
         </tr>
         <tr>
-            <td>Velocidad Orbital: </td>
+            <td>Velocidad Orbital:</td>
             <td><input id="inputVelocidadOrbital" readonly="readonly"></td>
         </tr>
         <tr>
-            <td>Distancia al sol: </td>
+            <td>Distancia al sol:</td>
             <td><input id="inputDistanciaSol" readonly="readonly"></td>
         </tr>
         </tbody>
     </table>
 </div>
-<div id="planetPropDos">
-    <table id="tablaPropDos">
+<div id="contenedorPropiedadesFisicas">
+    <table id="tablaPropiedadesFisicas">
         <thead>
         <tr>
             <th>Propiedades Fisicas</th>
@@ -58,21 +59,21 @@
         </thead>
         <tbody>
         <tr>
-            <td>Masa del Planeta: </td>
+            <td>Masa del Planeta:</td>
             <td><input id="inputMasaPlaneta" readonly="readonly"></td>
         </tr>
         <tr>
-            <td>Radio del Planeta: </td>
+            <td>Radio del Planeta:</td>
             <td><input id="inputRadioPlaneta" readonly="readonly"></td>
         </tr>
         <tr>
-            <td>Temperatura media: </td>
+            <td>Temperatura media:</td>
             <td><input id="inputTempMedia" readonly="readonly"></td>
         </tr>
         </tbody>
     </table>
 </div>
-<div class="pieDePagina">
+<div class="footer">
     Hecho en la facultad de ingeniería de la Universidad Católica de Córdoba por Bobadilla y Nievas
 </div>
 </body>
